@@ -45,24 +45,50 @@
             font-size: 20px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.25);
         }
+
+        .user-dot {
+            width: 18px;
+            height: 18px;
+            background: #4285f4;
+            border: 4px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px rgba(66,133,244,0.25);
+        }
+
+        .location-status {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 18px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+            font-size: 13px;
+        }
     </style>
 </head>
 
 <body>
+
+<div id="locationStatus" class="location-status">
+    Finding your location...
+</div>
 
 <div id="map"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
+
     const placeLatitude = 41.27584;
     const placeLongitude = 69.224277;
 
     const map = L.map("map", {
         zoomControl: true
-    }).setView([placeLatitude, placeLongitude], 15);
+    }).setView([placeLatitude, placeLongitude], 14);
 
-    // Clean modern map
     L.tileLayer(
         "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
         {
@@ -72,7 +98,6 @@
         }
     ).addTo(map);
 
-    // Spa icon
     const spaIcon = L.divIcon({
         className: "",
         html: '<div class="spa-marker">💆</div>',
@@ -81,23 +106,126 @@
         popupAnchor: [0, -22]
     });
 
-    // Place #1
-    const marker = L.marker(
+    const userIcon = L.divIcon({
+        className: "",
+        html: '<div class="user-dot"></div>',
+        iconSize: [26, 26],
+        iconAnchor: [13, 13]
+    });
+
+    const spaMarker = L.marker(
         [placeLatitude, placeLongitude],
         { icon: spaIcon }
     ).addTo(map);
 
-    marker.bindPopup(`
-        <div style="min-width:190px">
-            <b style="font-size:17px;">Spa Salon</b>
-            <br><br>
-            💰 400,000–1,000,000 UZS
-            <br>
-            ☎️ +998945755528
-            <br>
-            ✈️ @Malak5528
-        </div>
-    `);
+    let userMarker = null;
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) *
+            Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return R * c;
+    }
+
+    function formatDistance(km) {
+        if (km < 1) {
+            return Math.round(km * 1000) + " m away";
+        }
+
+        return km.toFixed(1) + " km away";
+    }
+
+    function showSpaPopup(distanceText = "") {
+        spaMarker.bindPopup(`
+            <div style="min-width:200px">
+                <b style="font-size:17px;">Spa Salon</b>
+                <br><br>
+                ${distanceText ? "📍 " + distanceText + "<br>" : ""}
+                💰 400,000–1,000,000 UZS
+                <br>
+                ☎️ +998945755528
+                <br>
+                ✈️ @Malak5528
+            </div>
+        `);
+    }
+
+    showSpaPopup();
+
+    if ("geolocation" in navigator) {
+
+        navigator.geolocation.getCurrentPosition(
+
+            function(position) {
+
+                const userLat = position.coords.latitude;
+                const userLon = position.coords.longitude;
+
+                userMarker = L.marker(
+                    [userLat, userLon],
+                    { icon: userIcon }
+                ).addTo(map);
+
+                userMarker.bindPopup("<b>You are here</b>");
+
+                const distance = calculateDistance(
+                    userLat,
+                    userLon,
+                    placeLatitude,
+                    placeLongitude
+                );
+
+                showSpaPopup(formatDistance(distance));
+
+                const bounds = L.latLngBounds([
+                    [userLat, userLon],
+                    [placeLatitude, placeLongitude]
+                ]);
+
+                map.fitBounds(bounds, {
+                    padding: [60, 60]
+                });
+
+                document.getElementById("locationStatus").innerText =
+                    "Location found";
+
+                setTimeout(() => {
+                    document.getElementById("locationStatus").style.display = "none";
+                }, 1500);
+            },
+
+            function(error) {
+
+                document.getElementById("locationStatus").innerText =
+                    "Location permission needed";
+
+                console.log(error);
+            },
+
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+
+    } else {
+
+        document.getElementById("locationStatus").innerText =
+            "Location not supported";
+    }
+
 </script>
 
 </body>
