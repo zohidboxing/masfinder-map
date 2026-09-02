@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <title>MasFinder Map</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<script>
+    // PLACE #1
+    const placeLatitude = 41.27584;
+    const placeLongitude = 69.224277;
+
+    // Create map
+    const map = L.map("map").setView(
+        [placeLatitude, placeLongitude],
+        15
+    );
+
+    // Map background
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            attribution: "© OpenStreetMap contributors"
+        }
+    ).addTo(map);
+
+    // Place #1 marker
+    const marker = L.marker(
+        [placeLatitude, placeLongitude]
+    ).addTo(map);
+
+    // Information shown when pin is clicked
+    marker.bindPopup(`
+        <b>Place #1</b><br><br>
+        💆 Spa Salon<br>
+        💰 400,000–1,000,000 UZS<br>
+        ☎️ +998945755528<br>
+        ✈️ @Malak5528
+    `);
+
+    marker.openPopup();
+</script>
+
+</body>
+</html>
