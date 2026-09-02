@@ -2,25 +2,48 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <title>MasFinder</title>
 
-    <title>MasFinder Map</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    />
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
     <style>
-        body {
+        html, body {
             margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
             font-family: Arial, sans-serif;
         }
 
         #map {
             width: 100%;
-            height: 100vh;
+            height: 100%;
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 15px;
+        }
+
+        .leaflet-popup-content {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .spa-marker {
+            width: 38px;
+            height: 38px;
+            background: white;
+            border-radius: 50%;
+            border: 3px solid #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.25);
         }
     </style>
 </head>
@@ -29,44 +52,52 @@
 
 <div id="map"></div>
 
-<script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-    // PLACE #1
     const placeLatitude = 41.27584;
     const placeLongitude = 69.224277;
 
-    // Create map
-    const map = L.map("map").setView(
-        [placeLatitude, placeLongitude],
-        15
-    );
+    const map = L.map("map", {
+        zoomControl: true
+    }).setView([placeLatitude, placeLongitude], 15);
 
-    // Map background
+    // Clean modern map
     L.tileLayer(
-        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
         {
-            attribution: "© OpenStreetMap contributors"
+            attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+            subdomains: "abcd",
+            maxZoom: 20
         }
     ).addTo(map);
 
-    // Place #1 marker
+    // Spa icon
+    const spaIcon = L.divIcon({
+        className: "",
+        html: '<div class="spa-marker">💆</div>',
+        iconSize: [44, 44],
+        iconAnchor: [22, 22],
+        popupAnchor: [0, -22]
+    });
+
+    // Place #1
     const marker = L.marker(
-        [placeLatitude, placeLongitude]
+        [placeLatitude, placeLongitude],
+        { icon: spaIcon }
     ).addTo(map);
 
-    // Information shown when pin is clicked
     marker.bindPopup(`
-        <b>Place #1</b><br><br>
-        💆 Spa Salon<br>
-        💰 400,000–1,000,000 UZS<br>
-        ☎️ +998945755528<br>
-        ✈️ @Malak5528
+        <div style="min-width:190px">
+            <b style="font-size:17px;">Spa Salon</b>
+            <br><br>
+            💰 400,000–1,000,000 UZS
+            <br>
+            ☎️ +998945755528
+            <br>
+            ✈️ @Malak5528
+        </div>
     `);
-
-    marker.openPopup();
 </script>
 
 </body>
