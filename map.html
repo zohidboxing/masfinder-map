@@ -39,43 +39,51 @@
         }
 
 
-        /* SPA POPUP */
+        /* =========================
+           POPUP
+        ========================= */
 
         .leaflet-popup-content-wrapper {
-            border-radius: 16px;
+            border-radius: 18px;
         }
 
         .leaflet-popup-content {
-            margin: 14px;
+            margin: 15px;
             font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
 
-        /* SPA MARKER */
+        /* =========================
+           SPA MARKER
+        ========================= */
 
         .spa-marker {
-            width: 40px;
-            height: 40px;
+
+            width: 42px;
+            height: 42px;
 
             background: white;
 
             border-radius: 50%;
+
             border: 3px solid #222;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
-            font-size: 21px;
+            font-size: 22px;
 
             box-shadow:
-                0 3px 10px
+                0 4px 12px
                 rgba(0,0,0,0.28);
         }
 
 
-        /* USER BLUE DOT */
+        /* =========================
+           USER BLUE DOT
+        ========================= */
 
         .user-dot {
 
@@ -89,19 +97,21 @@
             border-radius: 50%;
 
             box-shadow:
-                0 0 0 5px
+                0 0 0 6px
                 rgba(66,133,244,0.25);
         }
 
 
-        /* LOCATION BUTTON */
+        /* =========================
+           LOCATION BUTTON
+        ========================= */
 
         #locationButton {
 
             position: absolute;
 
             right: 18px;
-            bottom: 28px;
+            bottom: 30px;
 
             z-index: 1000;
 
@@ -119,34 +129,34 @@
             cursor: pointer;
 
             box-shadow:
-                0 3px 12px
-                rgba(0,0,0,0.30);
+                0 3px 14px
+                rgba(0,0,0,0.28);
         }
 
 
-        /* LOCATION STATUS */
+        /* =========================
+           STATUS MESSAGE
+        ========================= */
 
         #status {
 
             position: absolute;
 
-            top: 12px;
+            top: 14px;
             left: 50%;
 
-            transform:
-                translateX(-50%);
+            transform: translateX(-50%);
 
             z-index: 1000;
 
             background: white;
 
-            padding:
-                9px 15px;
+            padding: 9px 15px;
 
-            border-radius: 20px;
+            border-radius: 22px;
 
             box-shadow:
-                0 2px 10px
+                0 2px 12px
                 rgba(0,0,0,0.20);
 
             font-size: 13px;
@@ -155,7 +165,9 @@
         }
 
 
-        /* MAP BUTTONS */
+        /* =========================
+           DIRECTIONS BUTTONS
+        ========================= */
 
         .map-button {
 
@@ -167,11 +179,11 @@
 
             text-align: center;
 
-            padding: 11px 8px;
+            padding: 12px;
 
             margin-top: 8px;
 
-            border-radius: 10px;
+            border-radius: 11px;
 
             text-decoration: none;
 
@@ -179,23 +191,41 @@
 
             font-size: 14px;
 
-            background: #f5f5f5;
+            background: #f4f4f4;
 
-            border: 1px solid #d7d7d7;
+            border: 1px solid #d5d5d5;
 
             color: #111;
         }
 
 
         .map-button:active {
-            background: #e8e8e8;
+            background: #e5e5e5;
         }
 
 
         .distance {
 
+            font-weight: bold;
+
             margin-top: 5px;
             margin-bottom: 5px;
+        }
+
+
+        .spa-title {
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+        }
+
+
+        .directions-title {
+
+            margin-top: 13px;
 
             font-weight: bold;
         }
@@ -233,10 +263,9 @@
 <script>
 
 
-/* ==========================================
-   PLACE #1
-========================================== */
-
+/* ==================================================
+   SPA #1 LOCATION
+================================================== */
 
 const spaLat = 41.27584;
 
@@ -244,10 +273,9 @@ const spaLon = 69.224277;
 
 
 
-/* ==========================================
+/* ==================================================
    CREATE MAP
-========================================== */
-
+================================================== */
 
 const map = L.map(
     "map",
@@ -261,21 +289,20 @@ const map = L.map(
 
 
 
-/* ==========================================
-   OPENSTREETMAP
+/* ==================================================
+   MAP BACKGROUND
 
-   NO API KEY
-   NO CARTO
-   NO API KEY REQUIRED WATERMARK
-========================================== */
-
+   Free OpenStreetMap-based tiles
+   No CARTO
+   No API key
+================================================== */
 
 L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
     {
 
         attribution:
-            "&copy; OpenStreetMap contributors",
+            '&copy; OpenStreetMap contributors, Tiles style by HOT',
 
         maxZoom: 19
 
@@ -285,10 +312,9 @@ L.tileLayer(
 
 
 
-/* ==========================================
+/* ==================================================
    SPA ICON
-========================================== */
-
+================================================== */
 
 const spaIcon = L.divIcon({
 
@@ -298,22 +324,21 @@ const spaIcon = L.divIcon({
         '<div class="spa-marker">💆</div>',
 
     iconSize:
-        [46,46],
+        [48,48],
 
     iconAnchor:
-        [23,23],
+        [24,24],
 
     popupAnchor:
-        [0,-23]
+        [0,-24]
 
 });
 
 
 
-/* ==========================================
+/* ==================================================
    USER ICON
-========================================== */
-
+================================================== */
 
 const userIcon = L.divIcon({
 
@@ -332,10 +357,9 @@ const userIcon = L.divIcon({
 
 
 
-/* ==========================================
-   ADD SPA
-========================================== */
-
+/* ==================================================
+   CREATE SPA MARKER
+================================================== */
 
 const spaMarker = L.marker(
 
@@ -349,10 +373,9 @@ const spaMarker = L.marker(
 
 
 
-/* ==========================================
-   VARIABLES
-========================================== */
-
+/* ==================================================
+   USER VARIABLES
+================================================== */
 
 let userMarker = null;
 
@@ -362,10 +385,9 @@ let userLon = null;
 
 
 
-/* ==========================================
-   DISTANCE CALCULATION
-========================================== */
-
+/* ==================================================
+   CALCULATE DISTANCE
+================================================== */
 
 function calculateDistance(
     lat1,
@@ -410,9 +432,7 @@ function calculateDistance(
         *
 
         Math.sin(dLon / 2)
-
         *
-
         Math.sin(dLon / 2);
 
 
@@ -432,10 +452,9 @@ function calculateDistance(
 
 
 
-/* ==========================================
-   DISTANCE DISPLAY
-========================================== */
-
+/* ==================================================
+   FORMAT DISTANCE
+================================================== */
 
 function formatDistance(km) {
 
@@ -460,10 +479,9 @@ function formatDistance(km) {
 
 
 
-/* ==========================================
+/* ==================================================
    SPA POPUP
-========================================== */
-
+================================================== */
 
 function updateSpaPopup() {
 
@@ -478,7 +496,6 @@ function updateSpaPopup() {
 
 
         const distance =
-
             calculateDistance(
 
                 userLat,
@@ -494,8 +511,7 @@ function updateSpaPopup() {
 
             <div class="distance">
 
-                📍
-                ${formatDistance(distance)}
+                📍 ${formatDistance(distance)}
 
             </div>
 
@@ -505,21 +521,19 @@ function updateSpaPopup() {
 
 
 
+    /* GOOGLE MAPS */
+
     const googleMapsURL =
 
         `https://www.google.com/maps/dir/?api=1&destination=${spaLat},${spaLon}`;
 
 
 
+    /* YANDEX MAPS */
+
     const yandexMapsURL =
 
         `https://yandex.com/maps/?rtext=~${spaLat},${spaLon}&rtt=auto`;
-
-
-
-    const appleMapsURL =
-
-        `https://maps.apple.com/?daddr=${spaLat},${spaLon}&dirflg=d`;
 
 
 
@@ -528,18 +542,12 @@ function updateSpaPopup() {
         <div
             style="
                 min-width:230px;
-                max-width:270px;
+                max-width:280px;
             "
         >
 
 
-            <div
-                style="
-                    font-size:18px;
-                    font-weight:bold;
-                    margin-bottom:8px;
-                "
-            >
+            <div class="spa-title">
 
                 💆 Spa Salon
 
@@ -551,35 +559,27 @@ function updateSpaPopup() {
 
             <div>
 
-                💰
-                400,000–1,000,000 UZS
+                💰 400,000–1,000,000 UZS
 
             </div>
 
 
             <div>
 
-                ☎️
-                +998945755528
+                ☎️ +998945755528
 
             </div>
 
 
             <div>
 
-                ✈️
-                @Malak5528
+                ✈️ @Malak5528
 
             </div>
 
 
 
-            <div
-                style="
-                    margin-top:12px;
-                    font-weight:bold;
-                "
-            >
+            <div class="directions-title">
 
                 Get directions
 
@@ -597,7 +597,7 @@ function updateSpaPopup() {
 
             >
 
-                🧭 Google Maps
+                🧭 Open in Google Maps
 
             </a>
 
@@ -613,23 +613,7 @@ function updateSpaPopup() {
 
             >
 
-                🗺 Yandex Maps
-
-            </a>
-
-
-
-            <a
-
-                class="map-button"
-
-                href="${appleMapsURL}"
-
-                target="_blank"
-
-            >
-
-                🍎 Apple Maps
+                🗺 Open in Yandex Maps
 
             </a>
 
@@ -642,16 +626,15 @@ function updateSpaPopup() {
 
 
 
-/* INITIAL POPUP */
+/* POPUP BEFORE LOCATION IS KNOWN */
 
 updateSpaPopup();
 
 
 
-/* ==========================================
+/* ==================================================
    SHOW USER LOCATION
-========================================== */
-
+================================================== */
 
 function showUser(
     lat,
@@ -699,13 +682,13 @@ function showUser(
 
 
 
-    /* UPDATE SPA DISTANCE */
+    /* UPDATE SPA WITH DISTANCE */
 
     updateSpaPopup();
 
 
 
-    /* SHOW USER + SPA TOGETHER */
+    /* SHOW BOTH USER AND SPA */
 
     const bounds =
 
@@ -726,7 +709,7 @@ function showUser(
         {
 
             padding:
-                [60,60],
+                [70,70],
 
             maxZoom:
                 16
@@ -745,7 +728,6 @@ function showUser(
 
 
     status.innerText =
-
         "Location found ✓";
 
 
@@ -767,10 +749,9 @@ function showUser(
 
 
 
-/* ==========================================
+/* ==================================================
    REQUEST LOCATION
-========================================== */
-
+================================================== */
 
 function requestLocation() {
 
@@ -791,10 +772,9 @@ function requestLocation() {
 
 
 
-    /* ======================================
+    /* ===============================================
        TELEGRAM MINI APP LOCATION
-    ====================================== */
-
+    =============================================== */
 
     if (
 
@@ -831,7 +811,6 @@ function requestLocation() {
 
 
                     status.innerText =
-
                         "Location unavailable";
 
 
@@ -850,7 +829,6 @@ function requestLocation() {
 
 
                             status.innerText =
-
                                 "Please allow location access";
 
 
@@ -880,10 +858,9 @@ function requestLocation() {
 
 
 
-    /* ======================================
-       NORMAL BROWSER LOCATION
-    ====================================== */
-
+    /* ===============================================
+       NORMAL BROWSER FALLBACK
+    =============================================== */
 
     else if (
         navigator.geolocation
@@ -916,7 +893,6 @@ function requestLocation() {
 
 
                     status.innerText =
-
                         "Location permission denied";
 
                 },
@@ -946,7 +922,6 @@ function requestLocation() {
 
 
         status.innerText =
-
             "Location not supported";
 
     }
@@ -955,10 +930,9 @@ function requestLocation() {
 
 
 
-/* ==========================================
+/* ==================================================
    LOCATION BUTTON
-========================================== */
-
+================================================== */
 
 document
     .getElementById(
@@ -974,10 +948,9 @@ document
 
 
 
-/* ==========================================
-   TELEGRAM MINI APP
-========================================== */
-
+/* ==================================================
+   TELEGRAM MINI APP READY
+================================================== */
 
 if (
 
@@ -991,7 +964,6 @@ if (
 
 
     Telegram.WebApp.ready();
-
 
     Telegram.WebApp.expand();
 
